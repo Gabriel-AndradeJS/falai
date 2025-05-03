@@ -12,20 +12,20 @@ import { HashingServiceProtocol } from './hash/hashing.service';
   controllers: [AuthController],
   providers: [
     {
-        provide: HashingServiceProtocol,
-        useClass: BcryptService,
+      provide: HashingServiceProtocol,
+      useClass: BcryptService,
     },
     AuthService
-],
+  ],
   exports: [
     HashingServiceProtocol,
     JwtModule,
     ConfigModule
-],
+  ],
   imports: [
     PrismaModule,
     ConfigModule.forFeature(jwtConfig),
     JwtModule.registerAsync(jwtConfig.asProvider()),
-],
+  ],
 })
-export class AuthModule {}
+export class AuthModule { }
