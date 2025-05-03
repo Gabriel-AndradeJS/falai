@@ -8,11 +8,7 @@ export class AuthController {
 
     @Post('login')
     signIn(@Body() signInDto: SignInDto) {
-        return {
-            message: 'User logged in successfully',
-            user: signInDto,
-        };
-
+        return this.authService.signIn(signInDto);
     }
 
     @Post('register')
