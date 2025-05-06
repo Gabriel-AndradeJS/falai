@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PrismaModule } from 'src/prisma/prisma.module';
@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { BcryptService } from './hash/bcrypt.service';
 import { HashingServiceProtocol } from './hash/hashing.service';
 
+@Global()
 @Module({
   controllers: [AuthController],
   providers: [
