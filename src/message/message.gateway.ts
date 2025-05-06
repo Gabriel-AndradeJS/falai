@@ -16,12 +16,12 @@ export class MessageGateway implements OnModuleInit {
   }
 
   @SubscribeMessage('message')
-  handleMessage(@MessageBody() payload: {
+  async handleMessage(@MessageBody() payload: {
     senderId: number;
     receiverId: number;
     content: string;
   }) {
-    // this.messageService.createMessage(payload.senderId, payload.receiverId, payload.content);
+    await this.messageService.createMessage(payload.senderId, payload.receiverId, payload.content);
     this.server.emit('message', payload.content);
   }
 
