@@ -1,4 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
+import { PayloadTokenDto } from 'src/auth/dto/payload-token.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -27,4 +28,16 @@ export class MessageService {
         })
         console.log(`Message from ${senderId} to ${receiverId}: ${content}`);
     }
+
+    async getMessagesBetweenUsers(tokenPayload: PayloadTokenDto, receiver: number) {
+        return await this.prisma.message.findMany({
+          where: {
+            OR: [
+              { senderId: tokenPayload.sub, receiverId: receiver },
+              { senderId: receiver, receiverId: tokenPayload.sub },
+            ],
+          },
+          orderBy: { createdAt: 'asc' },
+        });
+      }
 }
