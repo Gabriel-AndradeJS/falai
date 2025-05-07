@@ -24,5 +24,12 @@ export class MessageGateway implements OnModuleInit {
     await this.messageService.createMessage(payload.senderId, payload.receiverId, payload.content);
     this.server.emit('message', payload.content);
   }
+ 
+  // @SubscribeMessage('getMessages')
+  // async handleGetMessages(@MessageBody() payload: { senderId: number; receiverId: number }) {
+  //   const messages = await this.messageService.getMessagesBetweenUsers(payload.senderId, payload.receiverId);
+  //   this.server.emit('messages', messages);
+  //   return messages;
+  // }
 
 }
