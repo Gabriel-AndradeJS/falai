@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PayloadTokenDto } from 'src/auth/dto/payload-token.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -26,7 +26,6 @@ export class MessageService {
                 content: content,
             },
         })
-        console.log(`Message from ${senderId} to ${receiverId}: ${content}`);
     }
 
     async getMessagesBetweenUsers(tokenPayload: PayloadTokenDto, receiver: number) {
@@ -38,6 +37,19 @@ export class MessageService {
             ],
           },
           orderBy: { createdAt: 'asc' },
+        });
+      }
+
+      async deleteMessage(messageId: number) {
+        const message = await this.prisma.message.findUnique({
+            where: { id: messageId },
+        });
+        if (!message) {
+            throw new HttpException('Mensagem não encontrada', HttpStatus.NOT_FOUND);
+        }
+        
+        await this.prisma.message.delete({
+            where: { id: messageId },
         });
       }
 }
