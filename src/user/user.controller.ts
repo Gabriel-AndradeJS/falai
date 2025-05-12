@@ -1,9 +1,10 @@
-import { Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseFilePipeBuilder, ParseIntPipe, Patch, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AuthTokenGuard } from 'src/auth/guard/auth-token.guard';
 import { UserService } from './user.service';
 import { TokenPayloadParam } from 'src/auth/param/token-payload.param';
 import { PayloadTokenDto } from 'src/auth/dto/payload-token.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -30,5 +31,11 @@ export class UserController {
             })
         ) file: Express.Multer.File) {
         return this.userService.uploadAvatarImage(tokenPayload, file);
+    }
+
+    @UseGuards(AuthTokenGuard)
+    @Patch()
+    async updateUser(@TokenPayloadParam() tokenPayloadParam: PayloadTokenDto, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.updateUser(tokenPayloadParam, updateUserDto);
     }
 }
