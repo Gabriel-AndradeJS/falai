@@ -1,4 +1,4 @@
-import { Controller, Get, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Param, ParseIntPipe, Query, UseGuards } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { TokenPayloadParam } from 'src/auth/param/token-payload.param';
 import { PayloadTokenDto } from 'src/auth/dto/payload-token.dto';
@@ -12,6 +12,12 @@ export class MessageController {
     @Get()
     getAllMessages(@TokenPayloadParam() tokenPayloadParam: PayloadTokenDto, @Query('receiver', ParseIntPipe) receiver: number) {
         return this.messageService.getMessagesBetweenUsers(tokenPayloadParam, receiver);
+    }
+
+    @UseGuards(AuthTokenGuard)
+    @Delete(':id')
+    deleteMessage(@Param('id', ParseIntPipe) messageId: number) {
+        return this.messageService.deleteMessage(messageId);
     }
     
 }
