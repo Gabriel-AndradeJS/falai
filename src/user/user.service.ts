@@ -62,4 +62,30 @@ export class UserService {
       throw new HttpException('Erro ao fazer upload da imagem!', HttpStatus.BAD_REQUEST);
     }
   }
+
+  async updateUser(tokenPayload: PayloadTokenDto, updateUserDto: UpdateUserDto) {
+    const user = await this.prisma.user.findFirst({
+      where: { id: tokenPayload.sub },
+    });
+
+    if (!user) {
+      throw new HttpException('Usuario não encontrado!', HttpStatus.NOT_FOUND);
+    }
+
+    const updatedUser = await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        name: updateUserDto.name,
+        email: updateUserDto.email,
+        password: updateUserDto.password,
+      }, select: {
+        id: true,
+        name: true,
+        email: true,
+      }
+    })
+
+    return updatedUser;
+
+  }
 }
