@@ -16,8 +16,8 @@ export class MessageController {
 
     @UseGuards(AuthTokenGuard)
     @Delete(':id')
-    deleteMessage(@Param('id', ParseIntPipe) messageId: number) {
-        return this.messageService.deleteMessage(messageId);
+    deleteMessage(@Param('id', ParseIntPipe) messageId: number, @TokenPayloadParam() tokenPayloadParam: PayloadTokenDto) {
+        return this.messageService.deleteMessage(messageId, tokenPayloadParam);
     }
     
 }
