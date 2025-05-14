@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { PayloadTokenDto } from 'src/auth/dto/payload-token.dto';
+import { TokenPayloadParam } from 'src/auth/param/token-payload.param';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -40,7 +41,7 @@ export class MessageService {
         });
       }
 
-      async deleteMessage(messageId: number) {
+      async deleteMessage(messageId: number, tokenPayload: PayloadTokenDto) {
         const message = await this.prisma.message.findUnique({
             where: { id: messageId },
         });
@@ -48,6 +49,11 @@ export class MessageService {
             throw new HttpException('Mensagem não encontrada', HttpStatus.NOT_FOUND);
         }
         
+        if(tokenPayload.sub !== message.senderId) {
+            throw new HttpException('Você não tem permissão para excluir esta mensagem', HttpStatus.FORBIDDEN);
+
+        }
+
         await this.prisma.message.delete({
             where: { id: messageId },
         });
