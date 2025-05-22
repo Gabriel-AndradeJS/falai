@@ -16,7 +16,7 @@ import { MessageModule } from './message/message.module';
     UserModule,
     AuthModule,
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'files'),
+      rootPath: join(__dirname, 'files'),
       serveRoot: '/files',
     }),
     MessageModule,
